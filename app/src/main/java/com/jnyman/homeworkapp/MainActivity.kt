@@ -47,22 +47,14 @@ class MainActivity : ComponentActivity() {
 
                 conversationDao.upsertConversation(SampleData.conversationSamples[0])
 
-                var conversations = conversationDao.getConversationsOrderedByName()
-
-                val ownProfile = Profile(
-                    nickName = "New Profile",
-                    profilePictureUri = "",
-                    own = true,
-                    id = 1
-                )
-
-                profileDao.upsertProfile(ownProfile)
+                var conversations = SampleData.conversationSamples
+//                conversationDao.getConversationsOrderedByName()
 
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "home-screen") {
                     composable("home-screen") {
                         HomeScreen(
-                            conversationDao = conversationDao,
+                            conversations = conversations,
                             onNavigateToConversation = { conversationName -> navController.navigate(conversationName) },
                             onNavigateToSettings = { navController.navigate("settings") }
                         )

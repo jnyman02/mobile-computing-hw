@@ -43,6 +43,13 @@ fun MessageCard(msg: Message, dao: ProfileDao) {
 
     if (msg.ownMessage) {
         profile = dao.getOwnProfile()
+        if (profile == null) {
+            profile = Profile(
+                nickName = "New Profile",
+                profilePictureUri = "",
+                own = true
+            )
+        }
     } else if (profile == null) {
         profile = Profile(
             nickName = msg.author,

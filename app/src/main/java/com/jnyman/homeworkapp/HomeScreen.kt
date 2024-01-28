@@ -34,9 +34,9 @@ import com.jnyman.homeworkapp.database.Conversation
 import com.jnyman.homeworkapp.ui.theme.HomeworkAppTheme
 
 @Composable
-fun HomeScreen(conversationDao: ConversationDao, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit) {
+fun HomeScreen(conversations: List<Conversation>, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit) {
 
-    val conversations = conversationDao.getConversationsOrderedByName()
+//    val conversations = conversationDao.getConversationsOrderedByName()
 
     Column() {
         Row() {
