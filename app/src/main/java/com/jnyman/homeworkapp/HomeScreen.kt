@@ -29,10 +29,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jnyman.homeworkapp.database.ConversationDao
+import com.jnyman.homeworkapp.database.Conversation
 import com.jnyman.homeworkapp.ui.theme.HomeworkAppTheme
 
 @Composable
-fun HomeScreen(conversations: List<Conversation>, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit) {
+fun HomeScreen(conversationDao: ConversationDao, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit) {
+
+    val conversations = conversationDao.getConversationsOrderedByName()
+
     Column() {
         Row() {
             Text(
@@ -129,46 +134,46 @@ fun ConversationPreview(conversation: Conversation, onNavigateToConversation: (c
     }
 }
 
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light Mode"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode"
-)
-@Composable
-fun PreviewHomeScreen() {
-    HomeworkAppTheme {
-        HomeScreen(
-            conversations = SampleData.conversationSamples,
-            onNavigateToConversation = { conversationName ->
-                println("Navigating to conversation: $conversationName")
-            },
-            onNavigateToSettings = { println("Navigating to settings")
-            }
-        )
-    }
-}
-
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light Mode"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode"
-)
-@Composable
-fun PreviewConversationPreview() {
-    HomeworkAppTheme {
-        Surface {
-            ConversationPreview(
-                conversation = Conversation("Sample Conversation", SampleData.conversationSample),
-                onNavigateToConversation = { conversationName ->
-                    println("Navigating to conversation: $conversationName")
-                }
-            )
-        }
-    }
-}
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//    name = "Light Mode"
+//)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "Dark Mode"
+//)
+//@Composable
+//fun PreviewHomeScreen() {
+//    HomeworkAppTheme {
+//        HomeScreen(
+//            conversations = SampleData.conversationSamples,
+//            onNavigateToConversation = { conversationName ->
+//                println("Navigating to conversation: $conversationName")
+//            },
+//            onNavigateToSettings = { println("Navigating to settings")
+//            }
+//        )
+//    }
+//}
+//
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//    name = "Light Mode"
+//)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "Dark Mode"
+//)
+//@Composable
+//fun PreviewConversationPreview() {
+//    HomeworkAppTheme {
+//        Surface {
+//            ConversationPreview(
+//                conversation = Conversation("Sample Conversation", SampleData.conversationSample),
+//                onNavigateToConversation = { conversationName ->
+//                    println("Navigating to conversation: $conversationName")
+//                }
+//            )
+//        }
+//    }
+//}

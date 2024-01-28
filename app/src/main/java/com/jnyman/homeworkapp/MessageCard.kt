@@ -37,9 +37,13 @@ import com.jnyman.homeworkapp.ui.theme.HomeworkAppTheme
 @Composable
 fun MessageCard(msg: Message, dao: ProfileDao) {
 
-    var profile = dao.getProfileByName(msg.author)
+    var profile: Profile
 
-    if (profile == null) {
+    profile = dao.getProfileByName(msg.author)
+
+    if (msg.ownMessage) {
+        profile = dao.getOwnProfile()
+    } else if (profile == null) {
         profile = Profile(
             nickName = msg.author,
             profilePictureUri = "",
@@ -47,19 +51,10 @@ fun MessageCard(msg: Message, dao: ProfileDao) {
         )
     }
 
+    dao.upsertProfile(profile = profile)
+
     // Add padding around the message
     Row(modifier = Modifier.padding(all = 8.dp)) {
-//        Image(
-//            painter = painterResource(R.drawable.skull),
-//            contentDescription = "skull emoji",
-//            modifier = Modifier
-//                // Set image size to 40 dp
-//                .size(40.dp)
-//                // Clip image to circle shape
-//                .clip(CircleShape)
-//                // Add a colored border around image
-//                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
-//        )
 
         AsyncImage(
             model = Uri.parse(profile.profilePictureUri),
@@ -93,7 +88,7 @@ fun MessageCard(msg: Message, dao: ProfileDao) {
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
 
             Text(
-                text = msg.author,
+                text = profile.nickName,
                 // Change text color
                 color = MaterialTheme.colorScheme.secondary,
                 // Change the typography style

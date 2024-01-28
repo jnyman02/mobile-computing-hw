@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,11 +47,12 @@ fun Settings(onNavigateToSetting: (settingName: String) -> Unit) {
 @Composable
 fun SettingPreview(name: String, text: String, onNavigateToSetting: (settingName: String) -> Unit) {
     Surface(
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .padding(vertical = 6.dp)
             .fillMaxSize()
             .clickable { onNavigateToSetting(name) },
+        shadowElevation = 4.dp
 
     ) {
         Text(

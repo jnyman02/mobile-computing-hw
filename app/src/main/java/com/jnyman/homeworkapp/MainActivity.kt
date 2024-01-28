@@ -8,6 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.jnyman.homeworkapp.database.Conversation
+import com.jnyman.homeworkapp.database.ConversationDao
+import com.jnyman.homeworkapp.database.ConversationDatabase
+import com.jnyman.homeworkapp.database.Profile
 import com.jnyman.homeworkapp.database.ProfileDatabase
 import com.jnyman.homeworkapp.settings.ProfileSetting
 import com.jnyman.homeworkapp.settings.Settings
@@ -15,10 +19,19 @@ import com.jnyman.homeworkapp.ui.theme.HomeworkAppTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val db by lazy {
+    private val profileDb by lazy {
         Room.databaseBuilder(
             applicationContext,
             ProfileDatabase::class.java, "profile-database"
+        )
+            .allowMainThreadQueries()
+            .build()
+    }
+
+    private val conversationDb by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            ConversationDatabase::class.java, "conversation-database"
         )
             .allowMainThreadQueries()
             .build()
@@ -28,16 +41,33 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HomeworkAppTheme {
+
+                val profileDao = profileDb.profileDao()
+                val conversationDao = conversationDb.conversationDao()
+
+                conversationDao.upsertConversation(SampleData.conversationSamples[0])
+
+                var conversations = conversationDao.getConversationsOrderedByName()
+
+                val ownProfile = Profile(
+                    nickName = "New Profile",
+                    profilePictureUri = "",
+                    own = true,
+                    id = 1
+                )
+
+                profileDao.upsertProfile(ownProfile)
+
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "home-screen") {
                     composable("home-screen") {
                         HomeScreen(
-                            conversations = SampleData.conversationSamples,
+                            conversationDao = conversationDao,
                             onNavigateToConversation = { conversationName -> navController.navigate(conversationName) },
                             onNavigateToSettings = { navController.navigate("settings") }
                         )
                     }
-                    SampleData.conversationSamples.forEach { conversation ->
+                    conversations.forEach { conversation ->
                         composable(conversation.name) {
                             ConversationCard(
                                 conversation = conversation,
@@ -48,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 },
-                                dao = db.profileDao()
+                                dao = profileDao
                             )
                         }
                     }
@@ -64,11 +94,12 @@ class MainActivity : ComponentActivity() {
                                     inclusive = true
                                 }
                             } },
-                            dao = db.profileDao()
+                            dao = profileDao
                         )
                     }
                 }
             }
         }
     }
+
 }
