@@ -107,4 +107,6 @@ dependencies {
     implementation("androidx.room:room-paging:$roomVersion")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // implementation("androidx.core:core-ktx:2.2.0")
 }

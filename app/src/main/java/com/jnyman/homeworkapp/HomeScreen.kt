@@ -21,8 +21,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,14 +39,14 @@ import com.jnyman.homeworkapp.database.Conversation
 import com.jnyman.homeworkapp.ui.theme.HomeworkAppTheme
 
 @Composable
-fun HomeScreen(conversations: List<Conversation>, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit) {
+fun HomeScreen(conversations: List<Conversation>, onNavigateToConversation: (conversationName: String) -> Unit, onNavigateToSettings: () -> Unit, lightLevel: Float) {
 
 //    val conversations = conversationDao.getConversationsOrderedByName()
 
     Column() {
         Row() {
             Text(
-                text = "Awesome Messaging App",
+                text = "Awesome messaging app",
                 // Change text color
                 color = MaterialTheme.colorScheme.primary,
                 // Change the typography style
@@ -61,6 +66,16 @@ fun HomeScreen(conversations: List<Conversation>, onNavigateToConversation: (con
                 )
             }
         }
+        Text(
+            text = String.format("Current light level in lux: %.0f", lightLevel),
+            // Change text color
+            color = MaterialTheme.colorScheme.primary,
+            // Change the typography style
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 6.dp),
+            // Set text font size
+            fontSize = 26.sp
+        )
         LazyColumn {
             items(conversations) { conversation ->
                 ConversationPreview(conversation = conversation, onNavigateToConversation)
