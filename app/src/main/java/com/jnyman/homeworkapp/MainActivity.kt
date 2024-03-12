@@ -4,6 +4,7 @@ import SampleData
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,7 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -69,6 +72,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!hasPermissions()) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, 0)
+        }
         setContent {
             HomeworkAppTheme {
 
@@ -135,6 +141,13 @@ class MainActivity : ComponentActivity() {
                                     inclusive = true
                                 }
                             } },
+                            dao = profileDao,
+                            onNavigateToCamera = { navController.navigate("camera-screen") }
+                        )
+                    }
+                    composable("camera-screen") {
+                        CameraScreen(
+                            onNavigateToProfileSettings = { navController.navigate("profile-setting") },
                             dao = profileDao
                         )
                     }
@@ -142,5 +155,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun hasPermissions(): Boolean {
+        return PERMISSIONS.all {
+            ContextCompat.checkSelfPermission(applicationContext, it) == PackageManager.PERMISSION_GRANTED
+        }
+
+    }
+
+    companion object {
+        private val PERMISSIONS = arrayOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.POST_NOTIFICATIONS,
+        )
+    }
+
 
 }

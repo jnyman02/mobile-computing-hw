@@ -109,4 +109,16 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     // implementation("androidx.core:core-ktx:2.2.0")
+
+    val cameraXVersion = "1.3.0-rc01"
+    implementation("androidx.camera:camera-core:${cameraXVersion}")
+    implementation("androidx.camera:camera-camera2:${cameraXVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraXVersion}")
+    implementation("androidx.camera:camera-video:${cameraXVersion}")
+
+    implementation("androidx.camera:camera-view:${cameraXVersion}")
+    implementation("androidx.camera:camera-extensions:${cameraXVersion}")
+
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
+
 }
